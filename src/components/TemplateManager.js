@@ -1,239 +1,194 @@
 import React, { useState } from 'react';
 import './TemplateManager.css';
 
-function TemplateManager({ templates, onAddTemplate, onDeleteTemplate, workouts, exercises }) {
-  const [showForm, setShowForm] = useState(false);
-  const [templateName, setTemplateName] = useState('');
-  const [selectedExercises, setSelectedExercises] = useState([]);
-  const [currentExercise, setCurrentExercise] = useState('');
-  const [currentSets, setCurrentSets] = useState([{ reps: '', weight: '' }]);
+function TemplateManager({ exercises }) {
+  const [goal, setGoal] = useState('');
+  const [duration, setDuration] = useState('');
+  const [generatedMenu, setGeneratedMenu] = useState(null);
 
-  const handleAddExerciseToTemplate = () => {
-    if (!currentExercise.trim()) return;
-
-    const exercise = {
-      name: currentExercise,
-      sets: currentSets.filter(set => set.reps && set.weight),
-    };
-
-    setSelectedExercises([...selectedExercises, exercise]);
-    setCurrentExercise('');
-    setCurrentSets([{ reps: '', weight: '' }]);
+  const menuDatabase = {
+    '筋肥大-30': {
+      title: '筋肥大 - 30分プログラム',
+      description: '短時間で効果的に筋肉を刺激するメニュー',
+      exercises: [
+        { name: 'ベンチプレス', sets: [{ reps: '10', weight: '60' }, { reps: '10', weight: '60' }, { reps: '8', weight: '65' }] },
+        { name: 'ダンベルカール', sets: [{ reps: '12', weight: '15' }, { reps: '12', weight: '15' }, { reps: '10', weight: '17.5' }] },
+        { name: 'トライセプスエクステンション', sets: [{ reps: '12', weight: '20' }, { reps: '12', weight: '20' }] },
+      ]
+    },
+    '筋肥大-45': {
+      title: '筋肥大 - 45分プログラム',
+      description: 'バランスよく全身を鍛えるメニュー',
+      exercises: [
+        { name: 'ベンチプレス', sets: [{ reps: '10', weight: '60' }, { reps: '10', weight: '60' }, { reps: '8', weight: '65' }, { reps: '6', weight: '70' }] },
+        { name: 'スクワット', sets: [{ reps: '12', weight: '80' }, { reps: '12', weight: '80' }, { reps: '10', weight: '90' }] },
+        { name: 'ラットプルダウン', sets: [{ reps: '12', weight: '50' }, { reps: '12', weight: '50' }, { reps: '10', weight: '55' }] },
+        { name: 'ダンベルカール', sets: [{ reps: '12', weight: '15' }, { reps: '10', weight: '17.5' }] },
+      ]
+    },
+    '筋肥大-60': {
+      title: '筋肥大 - 60分プログラム',
+      description: '本格的な筋肥大を目指すメニュー',
+      exercises: [
+        { name: 'ベンチプレス', sets: [{ reps: '10', weight: '60' }, { reps: '10', weight: '60' }, { reps: '8', weight: '65' }, { reps: '6', weight: '70' }] },
+        { name: 'インクラインベンチプレス', sets: [{ reps: '10', weight: '50' }, { reps: '10', weight: '50' }, { reps: '8', weight: '55' }] },
+        { name: 'スクワット', sets: [{ reps: '12', weight: '80' }, { reps: '12', weight: '80' }, { reps: '10', weight: '90' }, { reps: '8', weight: '95' }] },
+        { name: 'ラットプルダウン', sets: [{ reps: '12', weight: '50' }, { reps: '12', weight: '50' }, { reps: '10', weight: '55' }] },
+        { name: 'ダンベルカール', sets: [{ reps: '12', weight: '15' }, { reps: '12', weight: '15' }, { reps: '10', weight: '17.5' }] },
+        { name: 'トライセプスエクステンション', sets: [{ reps: '12', weight: '20' }, { reps: '12', weight: '20' }, { reps: '10', weight: '22.5' }] },
+      ]
+    },
+    'ダイエット-30': {
+      title: 'ダイエット - 30分プログラム',
+      description: 'カロリー消費を重視した高回数トレーニング',
+      exercises: [
+        { name: 'スクワット', sets: [{ reps: '20', weight: '50' }, { reps: '20', weight: '50' }, { reps: '15', weight: '60' }] },
+        { name: 'レッグプレス', sets: [{ reps: '20', weight: '80' }, { reps: '20', weight: '80' }] },
+        { name: 'ベンチプレス', sets: [{ reps: '15', weight: '50' }, { reps: '15', weight: '50' }] },
+      ]
+    },
+    'ダイエット-45': {
+      title: 'ダイエット - 45分プログラム',
+      description: '全身をバランスよく動かして脂肪燃焼',
+      exercises: [
+        { name: 'スクワット', sets: [{ reps: '20', weight: '50' }, { reps: '20', weight: '50' }, { reps: '15', weight: '60' }] },
+        { name: 'レッグプレス', sets: [{ reps: '20', weight: '80' }, { reps: '20', weight: '80' }, { reps: '15', weight: '90' }] },
+        { name: 'ベンチプレス', sets: [{ reps: '15', weight: '50' }, { reps: '15', weight: '50' }, { reps: '12', weight: '55' }] },
+        { name: 'ラットプルダウン', sets: [{ reps: '15', weight: '40' }, { reps: '15', weight: '40' }] },
+        { name: 'ダンベルカール', sets: [{ reps: '15', weight: '12.5' }, { reps: '15', weight: '12.5' }] },
+      ]
+    },
+    'ダイエット-60': {
+      title: 'ダイエット - 60分プログラム',
+      description: 'しっかり動いて最大限のカロリー消費',
+      exercises: [
+        { name: 'スクワット', sets: [{ reps: '20', weight: '50' }, { reps: '20', weight: '50' }, { reps: '15', weight: '60' }, { reps: '15', weight: '60' }] },
+        { name: 'レッグプレス', sets: [{ reps: '20', weight: '80' }, { reps: '20', weight: '80' }, { reps: '15', weight: '90' }] },
+        { name: 'レッグカール', sets: [{ reps: '15', weight: '30' }, { reps: '15', weight: '30' }, { reps: '12', weight: '35' }] },
+        { name: 'ベンチプレス', sets: [{ reps: '15', weight: '50' }, { reps: '15', weight: '50' }, { reps: '12', weight: '55' }] },
+        { name: 'ラットプルダウン', sets: [{ reps: '15', weight: '40' }, { reps: '15', weight: '40' }, { reps: '12', weight: '45' }] },
+        { name: 'ダンベルカール', sets: [{ reps: '15', weight: '12.5' }, { reps: '15', weight: '12.5' }] },
+        { name: 'トライセプスエクステンション', sets: [{ reps: '15', weight: '15' }, { reps: '15', weight: '15' }] },
+      ]
+    },
+    '筋力向上-45': {
+      title: '筋力向上 - 45分プログラム',
+      description: '高重量・低回数で筋力を向上',
+      exercises: [
+        { name: 'ベンチプレス', sets: [{ reps: '5', weight: '80' }, { reps: '5', weight: '80' }, { reps: '3', weight: '85' }] },
+        { name: 'スクワット', sets: [{ reps: '5', weight: '100' }, { reps: '5', weight: '100' }, { reps: '3', weight: '110' }] },
+        { name: 'デッドリフト', sets: [{ reps: '5', weight: '120' }, { reps: '5', weight: '120' }, { reps: '3', weight: '130' }] },
+      ]
+    },
+    '筋力向上-60': {
+      title: '筋力向上 - 60分プログラム',
+      description: 'BIG3を中心とした本格的な筋力強化',
+      exercises: [
+        { name: 'ベンチプレス', sets: [{ reps: '5', weight: '80' }, { reps: '5', weight: '80' }, { reps: '3', weight: '85' }, { reps: '3', weight: '90' }] },
+        { name: 'スクワット', sets: [{ reps: '5', weight: '100' }, { reps: '5', weight: '100' }, { reps: '3', weight: '110' }, { reps: '3', weight: '115' }] },
+        { name: 'デッドリフト', sets: [{ reps: '5', weight: '120' }, { reps: '5', weight: '120' }, { reps: '3', weight: '130' }] },
+        { name: 'ショルダープレス', sets: [{ reps: '6', weight: '40' }, { reps: '6', weight: '40' }, { reps: '4', weight: '45' }] },
+      ]
+    },
+    '初心者-30': {
+      title: '初心者 - 30分プログラム',
+      description: '基本動作を習得するための入門メニュー',
+      exercises: [
+        { name: 'ベンチプレス', sets: [{ reps: '12', weight: '40' }, { reps: '12', weight: '40' }] },
+        { name: 'スクワット', sets: [{ reps: '15', weight: '40' }, { reps: '15', weight: '40' }] },
+        { name: 'ラットプルダウン', sets: [{ reps: '12', weight: '30' }, { reps: '12', weight: '30' }] },
+      ]
+    },
+    '初心者-45': {
+      title: '初心者 - 45分プログラム',
+      description: '全身をバランスよく鍛える基礎メニュー',
+      exercises: [
+        { name: 'ベンチプレス', sets: [{ reps: '12', weight: '40' }, { reps: '12', weight: '40' }, { reps: '10', weight: '45' }] },
+        { name: 'スクワット', sets: [{ reps: '15', weight: '40' }, { reps: '15', weight: '40' }, { reps: '12', weight: '50' }] },
+        { name: 'ラットプルダウン', sets: [{ reps: '12', weight: '30' }, { reps: '12', weight: '30' }, { reps: '10', weight: '35' }] },
+        { name: 'ダンベルカール', sets: [{ reps: '12', weight: '10' }, { reps: '12', weight: '10' }] },
+        { name: 'レッグプレス', sets: [{ reps: '15', weight: '60' }, { reps: '15', weight: '60' }] },
+      ]
+    },
   };
 
-  const handleRemoveExerciseFromTemplate = (index) => {
-    setSelectedExercises(selectedExercises.filter((_, i) => i !== index));
-  };
-
-  const handleSetChange = (index, field, value) => {
-    const newSets = [...currentSets];
-    newSets[index][field] = value;
-    setCurrentSets(newSets);
-  };
-
-  const handleAddSet = () => {
-    setCurrentSets([...currentSets, { reps: '', weight: '' }]);
-  };
-
-  const handleRemoveSet = (index) => {
-    setCurrentSets(currentSets.filter((_, i) => i !== index));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!templateName.trim() || selectedExercises.length === 0) {
-      alert('テンプレート名と最低1つの種目を追加してください');
+  const handleGenerateMenu = () => {
+    if (!goal || !duration) {
+      alert('目的と時間を選択してください');
       return;
     }
 
-    const template = {
-      id: Date.now(),
-      name: templateName,
-      exercises: selectedExercises,
-      createdAt: new Date().toISOString(),
-    };
+    const key = `${goal}-${duration}`;
+    const menu = menuDatabase[key];
 
-    onAddTemplate(template);
-    setTemplateName('');
-    setSelectedExercises([]);
-    setShowForm(false);
-  };
-
-  const handleCreateFromRecent = () => {
-    if (workouts.length === 0) {
-      alert('記録がありません');
-      return;
+    if (menu) {
+      setGeneratedMenu(menu);
+    } else {
+      alert('選択した条件のメニューが見つかりません');
     }
-
-    const recentDate = workouts[workouts.length - 1].date;
-    const recentWorkouts = workouts.filter(w => w.date === recentDate);
-
-    const exercises = recentWorkouts.map(w => ({
-      name: w.exerciseName,
-      sets: w.sets,
-    }));
-
-    setSelectedExercises(exercises);
-    setTemplateName(`${recentDate}のメニュー`);
-    setShowForm(true);
   };
 
   return (
     <div className="template-manager">
-      <h2>テンプレート管理</h2>
+      <h2>おすすめメニュー作成</h2>
+      <p className="description">目的と時間を選択すると、あなたに合ったトレーニングメニューを提案します</p>
 
-      <div className="template-section">
-        <h3>保存済みテンプレート</h3>
-        {templates.length === 0 ? (
-          <p className="no-data">テンプレートがまだ保存されていません</p>
-        ) : (
-          <div className="template-list">
-            {templates.map((template) => (
-              <div key={template.id} className="template-item">
-                <div className="template-header">
-                  <h4>{template.name}</h4>
-                  <button
-                    onClick={() => onDeleteTemplate(template.id)}
-                    className="btn-delete-template"
-                  >
-                    削除
-                  </button>
-                </div>
-                <div className="template-exercises">
-                  {template.exercises.map((exercise, index) => (
-                    <div key={index} className="template-exercise">
-                      <strong>{exercise.name}</strong>
-                      <div className="template-sets">
-                        {exercise.sets.map((set, setIndex) => (
-                          <span key={setIndex} className="template-set">
-                            {set.reps}回 × {set.weight}kg
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+      <div className="menu-generator-form">
+        <div className="form-group">
+          <label>トレーニングの目的:</label>
+          <select value={goal} onChange={(e) => setGoal(e.target.value)} className="select-input">
+            <option value="">選択してください</option>
+            <option value="筋肥大">筋肥大（筋肉を大きくする）</option>
+            <option value="ダイエット">ダイエット（体脂肪を減らす）</option>
+            <option value="筋力向上">筋力向上（最大筋力を上げる）</option>
+            <option value="初心者">初心者（基礎から始める）</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label>トレーニング時間:</label>
+          <select value={duration} onChange={(e) => setDuration(e.target.value)} className="select-input">
+            <option value="">選択してください</option>
+            <option value="30">30分</option>
+            <option value="45">45分</option>
+            <option value="60">60分</option>
+          </select>
+        </div>
+
+        <button onClick={handleGenerateMenu} className="btn-generate">
+          メニューを作成
+        </button>
+      </div>
+
+      {generatedMenu && (
+        <div className="generated-menu">
+          <h3>{generatedMenu.title}</h3>
+          <p className="menu-description">{generatedMenu.description}</p>
+
+          <div className="menu-exercises">
+            {generatedMenu.exercises.map((exercise, index) => (
+              <div key={index} className="menu-exercise-item">
+                <h4>{exercise.name}</h4>
+                <div className="menu-sets">
+                  {exercise.sets.map((set, setIndex) => (
+                    <span key={setIndex} className="menu-set">
+                      {set.reps}回 × {set.weight}kg
+                    </span>
                   ))}
                 </div>
               </div>
             ))}
           </div>
-        )}
-      </div>
 
-      <div className="template-actions">
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="btn-toggle-form"
-        >
-          {showForm ? '閉じる' : '+ 新しいテンプレートを作成'}
-        </button>
-        {workouts.length > 0 && (
-          <button
-            onClick={handleCreateFromRecent}
-            className="btn-from-recent"
-          >
-            最近のトレーニングからテンプレートを作成
-          </button>
-        )}
-      </div>
-
-      {showForm && (
-        <form onSubmit={handleSubmit} className="template-form">
-          <div className="form-group">
-            <label>テンプレート名:</label>
-            <input
-              type="text"
-              value={templateName}
-              onChange={(e) => setTemplateName(e.target.value)}
-              placeholder="例: 胸・三頭筋の日"
-              required
-            />
+          <div className="menu-notes">
+            <h4>メモ:</h4>
+            <ul>
+              <li>表示されている重量は目安です。自分の体力に合わせて調整してください</li>
+              <li>各セット間は1〜2分の休憩を取りましょう</li>
+              <li>正しいフォームを意識してトレーニングしましょう</li>
+            </ul>
           </div>
-
-          <div className="form-group">
-            <label>種目を追加:</label>
-            <input
-              type="text"
-              list="exercises-list"
-              value={currentExercise}
-              onChange={(e) => setCurrentExercise(e.target.value)}
-              placeholder="種目名"
-            />
-            <datalist id="exercises-list">
-              {exercises.map((exercise, index) => (
-                <option key={index} value={exercise} />
-              ))}
-            </datalist>
-          </div>
-
-          <div className="sets-container">
-            <label>セット:</label>
-            {currentSets.map((set, index) => (
-              <div key={index} className="set-row">
-                <span>セット {index + 1}:</span>
-                <input
-                  type="number"
-                  placeholder="回数"
-                  value={set.reps}
-                  onChange={(e) => handleSetChange(index, 'reps', e.target.value)}
-                  min="0"
-                />
-                <span>回</span>
-                <input
-                  type="number"
-                  placeholder="重量"
-                  value={set.weight}
-                  onChange={(e) => handleSetChange(index, 'weight', e.target.value)}
-                  min="0"
-                  step="0.5"
-                />
-                <span>kg</span>
-                {currentSets.length > 1 && (
-                  <button type="button" onClick={() => handleRemoveSet(index)} className="btn-remove">
-                    削除
-                  </button>
-                )}
-              </div>
-            ))}
-            <button type="button" onClick={handleAddSet} className="btn-add-set">
-              + セットを追加
-            </button>
-          </div>
-
-          <button type="button" onClick={handleAddExerciseToTemplate} className="btn-add-exercise-to-template">
-            種目をテンプレートに追加
-          </button>
-
-          {selectedExercises.length > 0 && (
-            <div className="selected-exercises">
-              <h4>テンプレートに追加された種目:</h4>
-              {selectedExercises.map((exercise, index) => (
-                <div key={index} className="selected-exercise-item">
-                  <div className="selected-exercise-header">
-                    <strong>{exercise.name}</strong>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveExerciseFromTemplate(index)}
-                      className="btn-remove-small"
-                    >
-                      削除
-                    </button>
-                  </div>
-                  <div className="selected-exercise-sets">
-                    {exercise.sets.map((set, setIndex) => (
-                      <span key={setIndex}>
-                        {set.reps}回 × {set.weight}kg
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <button type="submit" className="btn-submit-template">
-            テンプレートを保存
-          </button>
-        </form>
+        </div>
       )}
     </div>
   );

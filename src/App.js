@@ -12,15 +12,18 @@ function App() {
   const [exercises, setExercises] = useLocalStorage('exercises', [
     'ベンチプレス', 'スクワット', 'デッドリフト'
   ]);
-  const [templates, setTemplates] = useLocalStorage('templates', []);
   const [activeTab, setActiveTab] = useState('record');
 
-  const handleAddWorkout = (workout) => {
-    setWorkouts([...workouts, workout]);
+  const handleSaveSession = (sessionWorkouts) => {
+    setWorkouts([...workouts, ...sessionWorkouts]);
 
-    if (!exercises.includes(workout.exerciseName)) {
-      setExercises([...exercises, workout.exerciseName]);
-    }
+    const newExercises = [...exercises];
+    sessionWorkouts.forEach(workout => {
+      if (!newExercises.includes(workout.exerciseName)) {
+        newExercises.push(workout.exerciseName);
+      }
+    });
+    setExercises(newExercises);
   };
 
   const handleDeleteWorkout = (id) => {
@@ -37,55 +40,6 @@ function App() {
     if (window.confirm(`「${exercise}」を削除しますか？`)) {
       setExercises(exercises.filter(e => e !== exercise));
     }
-  };
-
-  const handleAddTemplate = (template) => {
-    setTemplates([...templates, template]);
-    alert('テンプレートを保存しました');
-  };
-
-  const handleDeleteTemplate = (id) => {
-    if (window.confirm('このテンプレートを削除しますか？')) {
-      setTemplates(templates.filter(t => t.id !== id));
-    }
-  };
-
-  const handleExportData = () => {
-    const data = {
-      workouts,
-      exercises,
-      templates,
-      exportedAt: new Date().toISOString(),
-    };
-    const dataStr = JSON.stringify(data, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `workout-data-${new Date().toISOString().split('T')[0]}.json`;
-    link.click();
-  };
-
-  const handleImportData = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const data = JSON.parse(e.target.result);
-        if (window.confirm('データをインポートしますか？既存のデータは上書きされます。')) {
-          if (data.workouts) setWorkouts(data.workouts);
-          if (data.exercises) setExercises(data.exercises);
-          if (data.templates) setTemplates(data.templates);
-          alert('データをインポートしました');
-        }
-      } catch (error) {
-        alert('データの読み込みに失敗しました');
-      }
-    };
-    reader.readAsText(file);
-    event.target.value = '';
   };
 
   return (
@@ -121,19 +75,18 @@ function App() {
           メニュー管理
         </button>
         <button
-          className={activeTab === 'templates' ? 'active' : ''}
-          onClick={() => setActiveTab('templates')}
+          className={activeTab === 'menu-generator' ? 'active' : ''}
+          onClick={() => setActiveTab('menu-generator')}
         >
-          テンプレート
+          メニュー作成
         </button>
       </nav>
 
       <main className="App-main">
         {activeTab === 'record' && (
           <WorkoutForm
-            onAddWorkout={handleAddWorkout}
+            onSaveSession={handleSaveSession}
             exercises={exercises}
-            templates={templates}
           />
         )}
 
@@ -156,32 +109,14 @@ function App() {
           />
         )}
 
-        {activeTab === 'templates' && (
+        {activeTab === 'menu-generator' && (
           <TemplateManager
-            templates={templates}
-            onAddTemplate={handleAddTemplate}
-            onDeleteTemplate={handleDeleteTemplate}
-            workouts={workouts}
             exercises={exercises}
           />
         )}
       </main>
 
       <footer className="App-footer">
-        <div className="data-management">
-          <button onClick={handleExportData} className="btn-export">
-            データをエクスポート
-          </button>
-          <label className="btn-import">
-            データをインポート
-            <input
-              type="file"
-              accept=".json"
-              onChange={handleImportData}
-              style={{ display: 'none' }}
-            />
-          </label>
-        </div>
         <p className="footer-text">
           データはブラウザのLocalStorageに保存されます
         </p>

@@ -11,26 +11,9 @@
   color: #333;
 }
 
-.template-selector {
-  margin-bottom: 20px;
-  padding: 15px;
-  background: #f8f9fa;
-  border-radius: 4px;
-}
-
-.template-selector label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
-  color: #555;
-}
-
-.template-selector select {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
+.workout-form h3 {
+  color: #495057;
+  margin-bottom: 15px;
 }
 
 .form-group {
@@ -53,6 +36,88 @@
   font-size: 14px;
 }
 
+.session-list {
+  margin: 20px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 2px solid #667eea;
+}
+
+.session-item {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.session-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.session-header h4 {
+  margin: 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.session-sets {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.set-info {
+  padding: 8px;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.set-info span {
+  color: #495057;
+  font-weight: 500;
+}
+
+.session-total {
+  padding: 8px;
+  background: #e7f3ff;
+  border-radius: 4px;
+  color: #0056b3;
+  font-weight: bold;
+  text-align: right;
+}
+
+.btn-complete-session {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+  transition: transform 0.2s;
+}
+
+.btn-complete-session:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.add-exercise-section {
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
 .sets-container {
   margin-bottom: 15px;
 }
@@ -70,7 +135,7 @@
   gap: 10px;
   margin-bottom: 10px;
   padding: 10px;
-  background: #f8f9fa;
+  background: white;
   border-radius: 4px;
 }
 
@@ -86,7 +151,8 @@
   font-size: 14px;
 }
 
-.btn-remove {
+.btn-remove,
+.btn-remove-small {
   padding: 6px 12px;
   background: #dc3545;
   color: white;
@@ -96,7 +162,8 @@
   font-size: 12px;
 }
 
-.btn-remove:hover {
+.btn-remove:hover,
+.btn-remove-small:hover {
   background: #c82333;
 }
 
@@ -119,7 +186,7 @@
 .btn-submit {
   width: 100%;
   padding: 12px;
-  background: #007bff;
+  background: #28a745;
   color: white;
   border: none;
   border-radius: 4px;
@@ -129,5 +196,15 @@
 }
 
 .btn-submit:hover {
-  background: #0056b3;
+  background: #218838;
+}
+
+@media (max-width: 768px) {
+  .set-row {
+    flex-wrap: wrap;
+  }
+
+  .set-row input {
+    width: 70px;
+  }
 }
