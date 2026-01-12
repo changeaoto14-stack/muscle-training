@@ -1,0 +1,139 @@
+.workout-stats {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.workout-stats h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+.overall-stats,
+.exercise-stats {
+  margin-bottom: 30px;
+}
+
+.overall-stats h3,
+.exercise-stats h3 {
+  color: #495057;
+  margin-bottom: 20px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.top-exercises {
+  margin-top: 30px;
+}
+
+.top-exercises h4 {
+  color: #495057;
+  margin-bottom: 15px;
+}
+
+.exercise-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.exercise-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.exercise-name {
+  min-width: 150px;
+  font-weight: 500;
+  color: #333;
+}
+
+.exercise-bar-container {
+  flex: 1;
+  height: 30px;
+  background: #e9ecef;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.exercise-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  transition: width 0.3s ease;
+}
+
+.exercise-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.exercise-details {
+  margin-top: 20px;
+}
+
+.charts {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.chart-container {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.chart-container h4 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #495057;
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .exercise-name {
+    min-width: 100px;
+  }
+}

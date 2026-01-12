@@ -1,0 +1,149 @@
+.menu-manager {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.menu-manager h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+.menu-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.menu-section h3 {
+  margin-top: 0;
+  color: #495057;
+  font-size: 18px;
+}
+
+.section-description {
+  color: #6c757d;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.no-data {
+  text-align: center;
+  color: #999;
+  padding: 20px;
+}
+
+.exercise-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.exercise-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: white;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+}
+
+.exercise-item span {
+  color: #333;
+  font-weight: 500;
+}
+
+.btn-remove-exercise {
+  padding: 6px 12px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-remove-exercise:hover {
+  background: #c82333;
+}
+
+.btn-toggle-form {
+  width: 100%;
+  padding: 12px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.btn-toggle-form:hover {
+  background: #218838;
+}
+
+.add-exercise-form {
+  display: flex;
+  gap: 10px;
+}
+
+.exercise-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.btn-add-exercise {
+  padding: 10px 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.btn-add-exercise:hover {
+  background: #0056b3;
+}
+
+.default-exercises {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn-default-exercise {
+  padding: 8px 16px;
+  background: white;
+  color: #007bff;
+  border: 2px solid #007bff;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.btn-default-exercise:hover {
+  background: #007bff;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .add-exercise-form {
+    flex-direction: column;
+  }
+
+  .btn-add-exercise {
+    width: 100%;
+  }
+}
